@@ -1,7 +1,7 @@
 locals {
 
   # Azure Configuration
-  location = "australiaeast"
+  location = "eastus2"
   rg_name  = format("%s-rg", random_pet.name.id)
   web_name = format("%s-website", random_pet.name.id)
 
