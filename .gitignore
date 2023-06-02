@@ -1,6 +1,10 @@
 # Local . azure_website_actions_terraform
 azure_website_actions_terraform
 
+# Local .src of jekyll site to jekyll serve
+/src/_site
+/src/.jekyll-cache
+
 # Local .terraform directories
 **/.terraform/*
 
@@ -35,3 +39,4 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+
