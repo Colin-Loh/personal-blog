@@ -62,13 +62,6 @@ jobs:
 
             *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
 
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: output
-            })
-
       - name: Terraform Plan Status
         if: steps.plan.outcome == 'failure'
         run: exit 1
@@ -78,22 +71,22 @@ jobs:
         if: steps.plan.outcome == 'success' && github.event_name == 'push' && github.ref == 'main'
         run: terraform apply -auto-approve -input=false
 
-  deploy:
-    name: Publish Website
-    needs: terraform
-    runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          submodules: true
+  # deploy:
+  #   name: Publish Website
+  #   needs: terraform
+  #   runs-on: ubuntu-latest
+  #   permissions:
+  #     pull-requests: write
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #       with:
+  #         submodules: true
 
-      - name: Build And Deploy
-        id: builddeploy
-        uses: Azure/static-web-apps-deploy@v1
-        with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
-          action: "upload"
-          app_location: "src"
-          output_location: "public"
+  #     - name: Build And Deploy
+  #       id: builddeploy
+  #       uses: Azure/static-web-apps-deploy@v1
+  #       with:
+  #         azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+  #         action: "upload"
+  #         app_location: "src"
+  #         output_location: "public"
