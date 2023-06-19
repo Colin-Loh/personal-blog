@@ -10,7 +10,6 @@ on:
 jobs:
   deploy:
     name: Publish Website
-    needs: terraform
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
