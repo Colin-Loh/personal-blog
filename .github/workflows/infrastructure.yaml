@@ -8,7 +8,7 @@ on:
     - terraform
 
 jobs:
-  terraform:
+  bash-example:
     name: Build Azure Infrastructure
     runs-on: ubuntu-latest
     steps:
