@@ -10,8 +10,8 @@ jobs:
   terraform:
     name: Build Azure Infrastructure
     runs-on: ubuntu-latest
-    # permissions:
-    #   pull-requests: write
+    permissions:
+      pull-requests: write
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -36,7 +36,7 @@ jobs:
 
       - name: Terraform Plan
         id: plan
-        if: github.event_name == 'pull_request' #
+        if: github.event_name == 'pull_request' 
         run: terraform plan -input=false -no-color
         # continue-on-error: true
 
