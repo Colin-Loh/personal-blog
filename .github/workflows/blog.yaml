@@ -15,4 +15,4 @@ jobs:
 
       - name: "Test"
         run: |
-        echo: "Deploying a Static Web Application"
+          echo: "Deploying a Static Web Application"
