@@ -10,8 +10,8 @@ jobs:
   terraform:
     name: Build Azure Infrastructure
     runs-on: ubuntu-latest
-    # permissions:
-    #   pull-requests: write
+    permissions:
+      pull-requests: write
     steps:
       - name: Checkout
         uses: actions/checkout@v3
