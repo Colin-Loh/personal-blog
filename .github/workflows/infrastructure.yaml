@@ -1,0 +1,20 @@
+name: "Build Azure Infrastructure"
+
+on:
+  push:
+    branches:
+    - main
+    paths:
+    - terraform
+
+jobs:
+  terraform:
+    name: Build Azure Infrastructure
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkoutv3
+    
+      - name: Test
+        uses: echo: "This is Infrastructure"
+      
