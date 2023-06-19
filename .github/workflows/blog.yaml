@@ -11,8 +11,8 @@ jobs:
   bash-example:
     name: Deploying a Static Web Application
     runs-on: ubuntu-latest
-      steps:
+    steps:
 
-        - name: "Test"
-          run: |
-          echo: "Deploying a Static Web Application"
+      - name: "Test"
+        run: |
+        echo: "Deploying a Static Web Application"

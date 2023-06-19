@@ -12,6 +12,7 @@ jobs:
     name: Build Azure Infrastructure
     runs-on: ubuntu-latest
     steps:
+    
       - name: Test
         run: |
           echo "This is a bloody infrastructure"
