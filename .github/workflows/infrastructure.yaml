@@ -16,5 +16,5 @@ jobs:
         uses: actions/checkoutv3
     
       - name: Test
-        uses: echo: "This is Infrastructure"
+        run: echo: "This is Infrastructure"
       
