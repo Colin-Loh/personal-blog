@@ -3,12 +3,10 @@ name: "Build Azure Infrastructure"
 on:
   push:
     branches:
-    - "main"
-    - "feature/**"
+    - main
     paths:
     - "terraform/**"
-    pull_request:
-    - "main"
+  pull_request:
     paths:
     - "terraform/**"
 
@@ -16,15 +14,18 @@ jobs:
   terraform:
     name: Build Azure Infrastructure
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./terraform
+    permissions:
+      pull-requests: write
     steps:
-    
-      - name: Checkout Repositories
-        run: actions/checkout@v3
+      - uses: actions/checkout@v3
 
       - name: Set up Terraform
-        run:  hashicorp/setup-terraform@v2
+        uses: hashicorp/setup-terraform@v2
         with:
-          cli_config_credential_token: ${{ secrets.TF_API_TOKEN }}
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
       - name: Terraform Format
         id: fmt
@@ -39,7 +40,7 @@ jobs:
         run: terraform plan -input=false -no-color
 
       - name: Update Pull Request 
-        uses: actions/github-scripts@v6
+        uses: actions/github-script@v6
         if: github.event_name == 'pull_request'
         env: 
           PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
