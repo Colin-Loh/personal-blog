@@ -6,7 +6,7 @@ on:
     - main
     paths:
     - "terraform/**"
-    pull_request:
+  pull_request:
     - main
     paths:
     - "terraform/**"
