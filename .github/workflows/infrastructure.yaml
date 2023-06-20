@@ -14,8 +14,7 @@ jobs:
   terraform:
     name: Build Azure Infrastructure
     runs-on: ubuntu-latest
-    run: 
-      working-directory: ./terraform
+    working-directory: ./terraform
     steps:
       - uses: actions/checkout@v3
 
