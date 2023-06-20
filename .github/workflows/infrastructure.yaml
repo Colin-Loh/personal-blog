@@ -20,7 +20,7 @@ jobs:
         run: actions/checkout@v3
 
       - name: Set up Terraform
-        run:  hashicorp/setup-terraform@v2
+        uses: hashicorp/setup-terraform@v2
         with:
           cli_config_credential_token: ${{ secrets.TF_API_TOKEN }}
 
