@@ -3,11 +3,11 @@ name: "Build Azure Infrastructure"
 on:
   push:
     branches:
-    - "main"
+    - main
     paths:
     - "terraform/**"
     pull_request:
-    - "main"
+    - main
     paths:
     - "terraform/**"
 
