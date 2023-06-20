@@ -5,12 +5,14 @@ on:
     branches:
     - "main"
     - "feature/**"
+    - "feature"
     paths:
     - "terraform/**"
     pull_request:
     - "main"
     paths:
     - "terraform/**"
+    - "feature"
 
 jobs:
   terraform:
