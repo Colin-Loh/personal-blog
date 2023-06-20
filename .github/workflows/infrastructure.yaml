@@ -4,16 +4,12 @@ on:
   push:
     branches:
     - "main"
-    - "feature/**"
-    - "feature"
     paths:
     - "terraform/**"
     pull_request:
     - "main"
-    - "feature"
     paths:
     - "terraform/**"
-    - "feature"
 
 jobs:
   terraform:
