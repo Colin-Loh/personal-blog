@@ -22,6 +22,7 @@ jobs:
         with:
           terraform_version: 1.4.2
           cli_config_credential_token: ${{ secrets.TF_API_TOKEN }}
+        working_directory: ./terraform
 
       - name: Terraform Format
         id: fmt
