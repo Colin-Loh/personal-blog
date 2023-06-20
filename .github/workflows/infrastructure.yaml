@@ -36,6 +36,7 @@ jobs:
         run: terraform init
 
       - name: Terraform Plan
+        if: github.event_name == 'push'
         id: plan
         run: terraform plan -input=false -no-color
 
