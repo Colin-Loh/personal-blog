@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" class="html" data-theme="dark"><head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="/assets/css/main.css" />
+
+
+  <title>Blog Posts</title>
+
+  <main class="page-content" aria-label="Content">
+    <div class="w">
+
+  <ul class="horizontal-list">
+    <li>
+      <img src="/assets/images/Colin-Profile.jpeg">
+    </li>
+    <li>
+      <a href="/">Home</a>
+      &nbsp;
+    </li>
+    <li>
+      <a href="/about.html">About</a>
+      &nbsp;
+    </li>
+    <li>
+      <a href="/blog.html">Blog</a>
+      &nbsp;
+    </li>
+    <li>
+      <body>
+        <label class ="toggle">
+          <span class = "onoff"></span>
+          <input type = "checkbox" />
+          <span class  = "slider round"></span>
+        </label>
+      </body>
+    </li>
+</ul>
+
+<div class="lines"></div>
+
+<style type="text/css" media="screen">
+  .container {
+    margin: 1em auto;
+    max-width: 60em;
+    text-align: center;
+  }
+  h1 {
+    margin: 30px 0;
+    font-size: 4em;
+    line-height: 1;
+    letter-spacing: -1px;
+  }
+</style>
+
+<div class="container">
+  <h1>404</h1>
+
+  <p><strong>Page not found :(</strong></p>
+  <p>The requested page could not be found.</p>
+</div>
+
+
+        
+<div class="credits">&copy;&nbsp;2023&nbsp;Colin Loh
+  &nbsp;
+  •
+  &nbsp;All Rights Reserved&nbsp;
+  •
+  &nbsp;Theme&nbsp; <a href="https://github.com/abhinavs/moonwalk" target="_blank" rel="noreferrer">Moonwalk</a>
+</div>
+</div>
+</html>
+
+<!-- Theme Button Click -->
+
+<script type="text/javascript">
+const toggle = document.querySelector('.toggle input');
+
+toggle.addEventListener('click', function (e) {
+let currentTheme = document.documentElement.getAttribute('data-theme');
+if (currentTheme === 'dark') {
+transition();
+document.documentElement.setAttribute('data-theme', 'light');
+localStorage.setItem('theme', 'light');
+} else {
+transition();
+document.documentElement.setAttribute('data-theme', 'dark');
+localStorage.setItem('theme', 'dark');
+}
+});
+
+let transition = () => {
+document.documentElement.classList.add('transition');
+window.setTimeout(() => {
+document.documentElement.classList.remove('transition');
+}, 1000);
+}
+
+</script>
+
+<!-- Theme Button Click -->
