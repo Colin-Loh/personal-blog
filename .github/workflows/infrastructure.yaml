@@ -8,6 +8,7 @@ on:
     - "terraform/**"
   pull_request:
     - main
+    - feature
     paths:
     - "terraform/**"
 
