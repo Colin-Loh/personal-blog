@@ -3,10 +3,10 @@ name: "Build Azure Infrastructure and Deploy a Static Web Application"
 on:
   pull_request:
     types: [opened, synchronize, reopened, closed]
-    branches:
-    - feature
-    paths:
-    - "terraform/**"
+    # branches:
+    # - feature
+    # paths:
+    # - "terraform/**"
   # pull_request:
   #   branches:
   #   - feature
