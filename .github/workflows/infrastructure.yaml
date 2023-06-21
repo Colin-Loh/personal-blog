@@ -79,6 +79,7 @@ jobs:
 
   deploy:
     name: Publish Website
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
@@ -89,7 +90,6 @@ jobs:
 
       - name: Build And Deploy
         id: builddeploy
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         uses: Azure/static-web-apps-deploy@v1
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
