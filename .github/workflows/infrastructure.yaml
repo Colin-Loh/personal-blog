@@ -1,4 +1,4 @@
-name: "Build Azure Infrastructure"
+name: "Build Azure Infrastructure and Deploy a Static Web Application"
 
 on:
   push:
@@ -7,6 +7,8 @@ on:
     paths:
     - "terraform/**"
   pull_request:
+    branches:
+    - main
     paths:
     - "terraform/**"
 
@@ -73,3 +75,23 @@ jobs:
         id: apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -auto-approve -input=false
+
+  deploy:
+    name: Publish Website
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+
+      - name: Build And Deploy
+        id: builddeploy
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+          action: "upload"
+          app_location: "src"
+          output_location: "public"
