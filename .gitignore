@@ -1,6 +1,9 @@
 # Local . azure_website_actions_terraform
 azure_website_actions_terraform
 
+# Local default yaml configuration
+.github/website-automation.yml
+
 # Local .src of jekyll site to jekyll serve
 /src/_site
 /src/.jekyll-cache
