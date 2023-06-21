@@ -3,6 +3,9 @@ name: "Build Azure Infrastructure and Deploy a Static Web Application"
 on:
   pull_request:
     types: [opened, synchronize, reopened, closed]
+  push:
+    branches:
+    - main
     # branches:
     # - feature
     # paths:
