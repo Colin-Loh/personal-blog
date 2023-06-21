@@ -2,19 +2,10 @@ name: "Build Azure Infrastructure and Deploy a Static Web Application"
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened, closed]
+    types: [opened, reopened]
   push:
     branches:
     - main
-    # branches:
-    # - feature
-    # paths:
-    # - "terraform/**"
-  # pull_request:
-  #   branches:
-  #   - feature
-  #   paths:
-  #   - "terraform/**"
 
 jobs:
   terraform:
@@ -82,6 +73,7 @@ jobs:
   deploy:
     name: Publish Website
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    needs: terraform
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
