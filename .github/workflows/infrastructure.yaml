@@ -6,15 +6,6 @@ on:
   push:
     branches:
     - main
-    # branches:
-    # - feature
-    # paths:
-    # - "terraform/**"
-  # pull_request:
-  #   branches:
-  #   - feature
-  #   paths:
-  #   - "terraform/**"
 
 jobs:
   terraform:
