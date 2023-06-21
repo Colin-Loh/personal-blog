@@ -1,16 +1,16 @@
 name: "Build Azure Infrastructure and Deploy a Static Web Application"
 
 on:
-  push:
-    branches:
-    - main
-    paths:
-    - "terraform/**"
   pull_request:
     branches:
     - feature
     paths:
     - "terraform/**"
+  # pull_request:
+  #   branches:
+  #   - feature
+  #   paths:
+  #   - "terraform/**"
 
 jobs:
   terraform:
