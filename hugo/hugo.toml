@@ -17,8 +17,8 @@ minifyOutput = true
 env = "production"
 title = "Colin Loh"
 description = "ExampleSite description"
-keywords = [ "Blog", "Portfolio", "PaperMod" ]
-author = "Me"
+keywords = [ "Cloud", "DevOps", "Colin Loh", "Azure", "Platform", "Engineer" ]
+author = "Colin Loh"
 images = [ "<link or path of image for opengraph, twitter-cards>" ]
 DateFormat = "January 2, 2006"
 defaultTheme = "auto"
@@ -52,13 +52,13 @@ tocopen = false
   iconHeight = 35
 
   [params.profileMode]
-  enabled = false
-  title = "ExampleSite"
-  subtitle = "This is subtitle"
-  imageUrl = "<img location>"
+  enabled = true
+  title = "Colin Loh"
+  subtitle = "I like to automate boring stuff and write about it."
+  imageUrl = "./images/Colin-Profile.jpeg"
   imageWidth = 120
   imageHeight = 120
-  imageTitle = "my image"
+  imageTitle = "my test"
 
     [[params.profileMode.buttons]]
     name = "Posts"
@@ -69,16 +69,12 @@ tocopen = false
     url = "tags"
 
   [params.homeInfoParams]
-  Title = "Hi there 👋"
-  Content = "Welcome to Colin Loh blog"
+  Title = "Colin Loh"
+  Content = "I like to automate boring stuff and write about it."
 
   [[params.socialIcons]]
-  name = "twitter"
+  name = "linkedIn"
   url = "https://twitter.com/"
-
-  [[params.socialIcons]]
-  name = "stackoverflow"
-  url = "https://stackoverflow.com"
 
   [[params.socialIcons]]
   name = "github"
@@ -101,7 +97,7 @@ SiteVerificationTag = "XYZabc"
   [params.editPost]
   URL = "https://github.com/<path_to_repo>/content"
   Text = "Suggest Changes"
-  appendFilePath = true
+  appendFilePath = false
 
   [params.fuseOpts]
   isCaseSensitive = false
@@ -111,24 +107,6 @@ SiteVerificationTag = "XYZabc"
   threshold = 0.4
   minMatchCharLength = 0
   keys = [ "title", "permalink", "summary", "content" ]
-
-[[menu.main]]
-identifier = "categories"
-name = "categories"
-url = "/categories/"
-weight = 10
-
-[[menu.main]]
-identifier = "tags"
-name = "tags"
-url = "/tags/"
-weight = 20
-
-[[menu.main]]
-identifier = "example"
-name = "example.org"
-url = "https://example.org"
-weight = 30
 
 [markup.highlight]
 noClasses = false
