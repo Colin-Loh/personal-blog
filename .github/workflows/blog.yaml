@@ -18,10 +18,28 @@ jobs:
     permissions:
       pull-requests: write
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout Code
+        uses: actions/checkout@v2
         with:
           submodules: true
-      
+
+      - name: Update URL in TOML
+        run: |
+          TOML_FILE="app/hugo.toml"
+          NEW_URL="https://google.com"
+          
+          # Use Python script to update the URL in the TOML file
+          python3 - <<EOF
+          import toml
+
+          with open("$TOML_FILE", "r") as f:
+              data = toml.load(f)
+              data["url_key"] = "$NEW_URL"
+
+          with open("$TOML_FILE", "w") as f:
+              toml.dump(data, f)
+          EOF
+
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
