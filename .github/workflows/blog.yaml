@@ -43,7 +43,7 @@ jobs:
 
           with open("$TOML_FILE", "r") as f:
               data = toml.load(f)
-              data["url_key"] = "$NEW_URL"
+              data["baseURL"] = "$NEW_URL"
 
           with open("$TOML_FILE", "w") as f:
               toml.dump(data, f)
