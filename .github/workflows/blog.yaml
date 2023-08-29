@@ -30,3 +30,4 @@ jobs:
           action: "upload"
           app_location: "hugo"
           output_location: "public"
+          production_branch: "main"
