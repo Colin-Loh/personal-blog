@@ -26,7 +26,7 @@ jobs:
       - name: Update URL in TOML
         run: |
           TOML_FILE="app/hugo.toml"
-          NEW_URL="https://google.com"
+          NEW_URL="https://lively-water-0d069450f-feature.eastus2.3.azurestaticapps.net"
           
           # Use Python script to update the URL in the TOML file
           python3 - <<EOF
