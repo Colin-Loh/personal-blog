@@ -5,7 +5,7 @@ on:
     branches:
     - feature
     paths:
-    - "hugo/**"
+    - "app/**"
 
 jobs:
   staging:
