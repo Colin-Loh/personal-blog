@@ -31,8 +31,6 @@ cover:
 ---
 ## Introduction:
 
-Test
-
 When I embarked on my journey as a Cloud Engineer, I found myself surrounded by buzzwords. One question that frequently crossed everyone's mind was:
 
 > *"What is the difference between SRE and DevOps?"*

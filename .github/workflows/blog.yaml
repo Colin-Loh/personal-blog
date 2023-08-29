@@ -14,7 +14,6 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: staging
-      url: https://staging-lively-water-0d069450f.3.azurestaticapps.net
     permissions:
       pull-requests: write
     steps:
