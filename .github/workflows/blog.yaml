@@ -5,12 +5,14 @@ on:
     branches:
     - feature
     paths:
-    - "app/**"
+    - "hugo/**"
 
 jobs:
   deploy:
-    name: Publish Website
+    name: Deploy to Staging
     runs-on: ubuntu-latest
+    environment:
+      name: staging
     permissions:
       pull-requests: write
     steps:
