@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: staging
-      url: ${{ env.AZURE_STATIC_WEB_APP_STAGING_URL }}
+      url: https://lively-water-0d069450f-feature.eastus2.3.azurestaticapps.net 
     permissions:
       pull-requests: write
     steps:
@@ -34,7 +34,7 @@ jobs:
       - name: Update URL in TOML
         run: |
           TOML_FILE="app/hugo.toml"
-          NEW_URL="${{ env.AZURE_STATIC_WEB_APP_STAGING_URL }}"
+          NEW_URL="https://lively-water-0d069450f-feature.eastus2.3.azurestaticapps.net"
           
           # Use Python script to update the URL in the TOML file
           python3 - <<EOF
