@@ -13,12 +13,12 @@ disableXML = true
 minifyOutput = true
 
 [params]
-env = "production"
+# env = "production"
 title = "Colin Loh"
-description = "ExampleSite description"
+description = "Your friendly neighbourhood Cloud / DevOps / Platform Engineer blog. "
 keywords = [ "Cloud", "DevOps", "Colin Loh", "Azure", "Platform", "Engineer" ]
 author = "Colin Loh"
-images = [ "<link or path of image for opengraph, twitter-cards>" ]
+# images = [ "<link or path of image for opengraph, twitter-cards>" ]
 DateFormat = "January 2, 2006"
 defaultTheme = "auto"
 disableThemeToggle = false
@@ -78,14 +78,14 @@ tocopen = false
   name = "github"
   url = "https://github.com/colin-loh"
 
-[params.analytics.google]
-SiteVerificationTag = "XYZabc"
+# [params.analytics.google]
+# SiteVerificationTag = "XYZabc"
 
-[params.analytics.bing]
-SiteVerificationTag = "XYZabc"
+# [params.analytics.bing]
+# SiteVerificationTag = "XYZabc"
 
-[params.analytics.yandex]
-SiteVerificationTag = "XYZabc"
+# [params.analytics.yandex]
+# SiteVerificationTag = "XYZabc"
 
   [params.cover]
   hidden = true
@@ -99,7 +99,7 @@ SiteVerificationTag = "XYZabc"
   distance = 1_000
   threshold = 0.4
   minMatchCharLength = 0
-  keys = [ "title", "permalink", "summary", "content" ]
+  keys = [ "title", "permalink", "summary", "content", "Cloud", "DevOps", "Colin Loh", "Azure", "Platform", "Engineer" ]
 
 [[menu.main]]
 identifier = "posts"
