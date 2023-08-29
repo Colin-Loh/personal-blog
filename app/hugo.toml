@@ -1,3 +1,4 @@
+baseURL = 'http://example.org/'
 title = "Colin Loh"
 paginate = 5
 theme = "PaperMod"
@@ -5,7 +6,6 @@ enableRobotsTXT = true
 buildDrafts = false
 buildFuture = false
 buildExpired = false
-googleAnalytics = "UA-123-45"
 pygmentsUseClasses = true
 
 [minify]
@@ -73,11 +73,11 @@ tocopen = false
 
   [[params.socialIcons]]
   name = "linkedIn"
-  url = "https://twitter.com/"
+  url = "https://www.linkedin.com/in/colin-loh/"
 
   [[params.socialIcons]]
   name = "github"
-  url = "https://github.com/"
+  url = "https://github.com/colin-loh"
 
 [params.analytics.google]
 SiteVerificationTag = "XYZabc"
