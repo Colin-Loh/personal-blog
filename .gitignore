@@ -2,10 +2,13 @@
 azure_website_actions_terraform
 
 # Local . app 
-app
+old_app
 
 # Local . dev
 dev
+
+# Broken local hugo
+hugo
 
 # Local default yaml configuration
 .github/website-automation.yml
