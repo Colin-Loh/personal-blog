@@ -1,3 +1,4 @@
+baseURL = "home"
 title = "Colin Loh"
 paginate = 5
 theme = "PaperMod"
@@ -77,16 +78,16 @@ tocopen = false
 
   [[params.socialIcons]]
   name = "github"
-  url = "https://github.com/"
+  url = "https://github.com/Colin-Loh"
 
-[params.analytics.google]
-SiteVerificationTag = "XYZabc"
+# [params.analytics.google]
+# SiteVerificationTag = "XYZabc"
 
-[params.analytics.bing]
-SiteVerificationTag = "XYZabc"
+# [params.analytics.bing]
+# SiteVerificationTag = "XYZabc"
 
-[params.analytics.yandex]
-SiteVerificationTag = "XYZabc"
+# [params.analytics.yandex]
+# SiteVerificationTag = "XYZabc"
 
   [params.cover]
   hidden = true
