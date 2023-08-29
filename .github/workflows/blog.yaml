@@ -8,18 +8,20 @@ on:
     - "hugo/**"
 
 jobs:
-  deploy:
+  staging:
+
     name: Deploy to Staging
     runs-on: ubuntu-latest
     environment:
       name: staging
+      url: https://lively-water-0d069450f-feature.eastus2.3.azurestaticapps.net
     permissions:
       pull-requests: write
     steps:
       - uses: actions/checkout@v2
         with:
           submodules: true
-
+      
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
@@ -28,3 +30,4 @@ jobs:
           action: "upload"
           app_location: "hugo"
           output_location: "public"
+          production_branch: "main"
