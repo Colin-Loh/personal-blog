@@ -4,6 +4,9 @@ azure_website_actions_terraform
 # Local . app 
 app
 
+# Local . dev
+dev
+
 # Local default yaml configuration
 .github/website-automation.yml
 
