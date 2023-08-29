@@ -1,4 +1,3 @@
-baseURL = "https://www.colinloh.dev"
 title = "Colin Loh"
 paginate = 5
 theme = "PaperMod"
