@@ -1,5 +1,5 @@
 ---
-title: "SRE and DevOps"
+title: "DevOps and SRE"
 date: 2023-08-25T16:57:15+10:00
 # weight: 1
 # aliases: ["/first"]
