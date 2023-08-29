@@ -1,4 +1,4 @@
-baseURL = 'http://example.org/'
+baseURL = "/"
 title = "Colin Loh"
 paginate = 5
 theme = "PaperMod"
@@ -57,7 +57,6 @@ tocopen = false
   imageUrl = "./images/Colin-Profile.jpeg"
   imageWidth = 120
   imageHeight = 120
-  imageTitle = "my test"
 
     [[params.profileMode.buttons]]
     name = "Posts"
