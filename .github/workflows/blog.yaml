@@ -18,10 +18,21 @@ jobs:
     permissions:
       pull-requests: write
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout Code
+        uses: actions/checkout@v2
         with:
           submodules: true
-      
+
+      - name: Update baseURL in TOML
+        run: |
+          # Replace 'path/to/your/file.toml' with the actual path to your TOML file
+          ls
+          TOML_FILE="app/hugo.toml"
+          NEW_BASEURL="https://lively-water-0d069450f-feature.eastus2.3.azurestaticapps.net"
+          
+          # Use sed to update the baseURL in the TOML file
+          sed -i "s/baseURL = \".*\"/baseURL = \"$NEW_BASEURL\"/" "$TOML_FILE"
+
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
