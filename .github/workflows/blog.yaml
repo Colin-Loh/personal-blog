@@ -23,31 +23,15 @@ jobs:
         with:
           submodules: true
 
-      - name: Setup Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.8  # Use the appropriate Python version
-    
-      - name: Install dependencies
+      - name: Update baseURL in TOML
         run: |
-          pip install toml
-
-      - name: Update URL in TOML
-        run: |
+          # Replace 'path/to/your/file.toml' with the actual path to your TOML file
+          ls
           TOML_FILE="app/hugo.toml"
-          NEW_URL="https://lively-water-0d069450f-feature.eastus2.3.azurestaticapps.net"
+          NEW_BASEURL="https://lively-water-0d069450f-feature.eastus2.3.azurestaticapps.net"
           
-          # Use Python script to update the URL in the TOML file
-          python3 - <<EOF
-          import toml
-
-          with open("$TOML_FILE", "r") as f:
-              data = toml.load(f)
-              data["baseURL"] = "$NEW_URL"
-
-          with open("$TOML_FILE", "w") as f:
-              toml.dump(data, f)
-          EOF
+          # Use sed to update the baseURL in the TOML file
+          sed -i "s/baseURL = \".*\"/baseURL = \"$NEW_BASEURL\"/" "$TOML_FILE"
 
       - name: Build And Deploy
         id: builddeploy
