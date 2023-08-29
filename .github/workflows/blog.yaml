@@ -23,6 +23,15 @@ jobs:
         with:
           submodules: true
 
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8  # Use the appropriate Python version
+    
+      - name: Install dependencies
+        run: |
+          pip install toml
+
       - name: Update URL in TOML
         run: |
           TOML_FILE="app/hugo.toml"
