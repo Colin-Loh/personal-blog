@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>DevOps on Colin Loh</title>
+    <link>https://colinloh.dev/tags/devops/</link>
+    <description>Recent content in DevOps on Colin Loh</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Fri, 25 Aug 2023 16:57:15 +1000</lastBuildDate><atom:link href="https://colinloh.dev/tags/devops/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>DevOps and SRE</title>
+      <link>https://colinloh.dev/posts/devops_sre/</link>
+      <pubDate>Fri, 25 Aug 2023 16:57:15 +1000</pubDate>
+      
+      <guid>https://colinloh.dev/posts/devops_sre/</guid>
+      <description>Introduction: test
+When I embarked on my journey as a Cloud Engineer, I found myself surrounded by buzzwords. One question that frequently crossed everyone&amp;rsquo;s mind was:
+&amp;ldquo;What is the difference between SRE and DevOps?&amp;rdquo;
+This question led me down a rabbit hole in search of answers, prompting me to delve deeper into the concepts of SRE and DevOps.
+What is DevOps? DevOps, as the name suggests is a unification of “Development” and “Operations”.</description>
+    </item>
+    
+  </channel>
+</rss>
