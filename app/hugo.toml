@@ -2,6 +2,7 @@ baseURL = "https://colinloh.dev/"
 title = "Colin Loh"
 paginate = 5
 theme = "hugo-PaperMod"
+themesDir = "themes/hugo-PaperMod"
 enableRobotsTXT = true
 buildDrafts = false
 buildFuture = false
