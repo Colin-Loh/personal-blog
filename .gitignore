@@ -4,9 +4,6 @@ azure_website_actions_terraform
 # Local . app 
 old_app
 
-# Local . dev
-dev
-
 # Broken local hugo
 hugo
 
