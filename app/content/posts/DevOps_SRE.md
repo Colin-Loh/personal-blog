@@ -31,8 +31,6 @@ UseHugoToc: false
 ---
 ## Introduction:
 
-test
-
 When I embarked on my journey as a Cloud Engineer, I found myself surrounded by buzzwords. One question that frequently crossed everyone's mind was:
 
 > *"What is the difference between SRE and DevOps?"*
@@ -114,25 +112,22 @@ The traditional application release process includes Developers developing code 
 
 DevOps aim to solve this with the following concepts: 
 
-### 1. Collaboration and Communication:
-DevOps emphasises the importance of open communication and collaboration between development and operations teams. By sharing knowledge, understanding each other's challenges, and working together, teams can overcome bottlenecks and achieve common goals.
+### 1. Continuous Feedback:
+DevOps start with open communication and collaboration between development and operations teams. By sharing knowledge, understanding each other's challenges, and working together, teams can overcome bottlenecks and achieve common goals.
 
-### 2. Automation:
-Automation is at the heart of DevOps. It involves automating repetitive and manual tasks, such as code deployment, testing, and provisioning infrastructure. Automation accelerates processes, reduces human errors, and ensures consistency.
+### 2. Plan:
+Agile practice, breaking the challenges into smaller pieces and assigning it to the team to focus at a particular sprint. 
 
-### 3. Continuous Integration (CI):
+### 3. Build: 
+The team will commit their code in git and kick off automating repetitive checks and tests. Automation accelerates processes, reduces human errors, and ensures consistency. 
+
+### 4. Continuous Integration (CI):
 CI involves integrating code changes from multiple developers into a shared repository multiple times a day. Automated tests are run to validate changes, ensuring that the codebase remains stable and functional.
 
-### 4. Continuous Delivery (CD):
+### 5. Continuous Delivery / Deployment (CD):
 CD builds on CI by automating the deployment process. It ensures that code changes can be rapidly and reliably deployed to production environments. Automated pipelines push code through various stages, from testing to production, while maintaining quality.
 
-### 5. Infrastructure as Code (IaC):
-IaC treats infrastructure provisioning and management as software development. It involves using code to define and configure infrastructure, enabling version control, repeatability, and consistency.
-
-### 6. Monitoring and Feedback Loops:
-DevOps encourages continuous monitoring of applications and infrastructure to gather data on performance, user experience, and other key metrics. Feedback loops provide insights into system behaviour, helping teams make informed decisions for improvements.
-
-### 7. Security as Code (DevSecOps):
-Security is integrated into the development process, known as "Security as Code." Security checks, tests, and configurations are automated, ensuring that security is not an afterthought but an integral part of the pipeline.
+### 6. Operate: 
+DevOps encourages continuous operationg and monitoring of applications and infrastructure to gather data on performance, user experience, and other key metrics. Feedback loops provide insights into system behaviour, helping teams make informed decisions for improvements.
 
 DevOps transforms the software development process by fostering a culture of collaboration, continuous improvement, and automation. By aligning development and operations teams and embracing these core concepts, organisations can deliver high-quality software more frequently with fewer errors and respond to market demands effectively.
