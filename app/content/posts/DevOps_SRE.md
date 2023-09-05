@@ -125,9 +125,9 @@ The team will commit their code in git and kick off automating repetitive checks
 CI involves integrating code changes from multiple developers into a shared repository multiple times a day. Automated tests are run to validate changes, ensuring that the codebase remains stable and functional.
 
 ### 5. Continuous Delivery / Deployment (CD):
-CD builds on CI by automating the deployment process. It ensures that code changes can be rapidly and reliably deployed to production environments. Automated pipelines push code through various stages, from testing to production, while maintaining quality.
+CD builds on CI by automating the deployment process. It ensures that code changes can be rapidly and reliably deployed to production environments. Automated pipelines push code through various stages, from testing to production while maintaining quality.
 
 ### 6. Operate: 
-DevOps encourages continuous operationg and monitoring of applications and infrastructure to gather data on performance, user experience, and other key metrics. Feedback loops provide insights into system behaviour, helping teams make informed decisions for improvements.
+DevOps encourages continuous operation and monitoring of applications and infrastructure to gather data on performance, user experience, and other key metrics. Feedback loops provide insights into system behaviour, helping teams make informed decisions for improvements.
 
 DevOps transforms the software development process by fostering a culture of collaboration, continuous improvement, and automation. By aligning development and operations teams and embracing these core concepts, organisations can deliver high-quality software more frequently with fewer errors and respond to market demands effectively.
