@@ -29,14 +29,11 @@ UseHugoToc: false
 #     relative: false # when using page bundles set this to true
 #     hidden: true # only hide on current single page
 ---
-## Introduction:
+# Introduction:
 
 In this blog post, we'll explore how to efficiently manage Azure Active Directory (AD) Service Principals using Terraform. Automating this process helps in maintaining consistent security standards and simplifying the configuration of Azure resources without having the need to input UUID. 
 
-&nbsp;
-
-
-## Terraform Module Call
+# Terraform Module Call
 
 ```
 module "service_principal" {
@@ -65,14 +62,12 @@ The most important thing to note is `permissions` array, it defines a list of ac
 - `Roles`: Application Permissions allow the application to operate autonomously, without user intervention, and typically require admin consent.
 - `Scope`: Delegated Permissions do not require admin consent and allow the application to act on behalf of a user, accessing resources within the permissions granted to that user.
 
-&nbsp;
-
-## The Module 
+# The Module 
 
 Now we get into the fun stuff 🎉! Whilst going through the module I am going to split it up into some sub-sections to make it easier for us to talk through. 
 
 ```
-resource "azuread_service_principal" "resource_id" {
+resource "azuread_service_principal" "well-_known" {
   for_each = { 
     for perm in var.service_principal.permissions : 
     format("%s_%s", var.service_principal.name, perm.Permission) => perm 
@@ -127,7 +122,7 @@ resource "azuread_service_principal" "principal_id" {
 
 ```
 
-Once the service principal for our `well-known` Enterprise Application, we need to create our own Enterprise Application before we can create our custom SPN. We use `dynamic` block which iterate over roles and scopes to configure access permissions dynamically based on input variables.
+Once we have provisioned our `well_known` Service Principal, we will need to create a Enterprise Application before we can create our very own custom SPN. We will use `dynamic` block which iterate over roles and scopes to configure access permissions dynamically based on input variables.
 
 Note that `Application permission` or `Role` requires us to use app_role_ids whereas `Delegated permission` or `Scope` requires us to use oauth2_permission_scope_ids basically the `content` specifies the configuration of app role IDs and OAuth2 permission scopes for the service principal.
 
@@ -163,13 +158,12 @@ The final mapped structure uses format("%s_%s", i.spn, i.role) to create a uniqu
 - `resource_object_id`: This is the object ID of the application or another service principal against which the role is defined. It dynamically references the object ID using each.value.permission, which corresponds to the permission involved in the role assignment.
 - `app_role_id`: This identifies the specific role within the application or service that is being assigned to the service principal. The role ID is retrieved dynamically, matching the role and permission.
 
-
-&nbsp;
-
-## Conclusion
+# Conclusion
 
 One of the persistent challenges in managing Azure AD Service Principals is the requirement for admin consent when setting application permissions. This process often requires manual intervention, which can lead to delays or even be overlooked, posing a risk to both security and efficiency. 
 
 Our Terraform module addresses this issue by automating the assignment of application permissions, eliminating the need for manual admin consent and UUID entries. This automation not only streamlines the process but also ensures that each service principal is configured consistently and securely, adhering to best practices without requiring direct administrative action. Embrace the power of automation with our solution to enhance your Azure environment's management and security.
 
 You can find this module [here](https://github.com/Colin-Loh/terraform-azuread-service-principal)
+
+&nbsp;
