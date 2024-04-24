@@ -1,9 +1,9 @@
 ---
 title: "Automating Azure Service Principal with Terraform"
-date: 2024-04-20
+date: 2024-04-24
 # weight: 1
 # aliases: ["/first"]
-tags: ["DevOps", "SRE"]
+tags: ["Terraform", "Admin Consent", "Service Principals", "Application Registration"]
 author: "Colin Loh"
 showToc: false
 TocOpen: false
@@ -29,141 +29,248 @@ UseHugoToc: false
 #     relative: false # when using page bundles set this to true
 #     hidden: true # only hide on current single page
 ---
-# Introduction:
+# Introduction
 
-In this blog post, we'll explore how to efficiently manage Azure Active Directory (AD) Service Principals using Terraform. Automating this process helps in maintaining consistent security standards and simplifying the configuration of Azure resources without having the need to input UUID. 
+In this blog post, we will explore how to efficiently manage Azure Active Directory (AD) Service Principals using Terraform. Before we go over how we can automate this process, lets us go over what is a Service Principal, what is an App Registration and why do we need it. 
+
+# App Registration
+
+App Registration just as the name implies it provide Azure AD **authentication / authorization** for any applications (e.g. Azure DevOps). 
+
+This is how it looks like : 
+
+![app-reg](https://learn.microsoft.com/en-us/graph/images/quickstart-register-app/portal-02-app-reg-01.png)
+
+Once it is registered, the application will be created in  `App Registrations` and  `Enterprise Registrations` also known as **Service Principals.** You can use the Enterprise Application page in Azure AD to see a list of Service Principals in the tenant. 
+
+Confused yet? Lets talk about the differences: 
+
+**Application Registration - T**his is the actual application instance, local representation or application object (whatever you want to call this). In simple words, its basically a place where you set the authentication and authorization of your application. 
+
+In the portal, you can set various things but the most important things are:
+
+- `API Permission` : The API permission for the App Registration/Service Principal, specifying which services or APIs the application can access. (e.g. Microsoft Graph)
+- `Application Permission`: Application Permissions allow the application to operate autonomously, without user intervention, and typically require admin consent.
+- `Delegated Permission`: Delegated Permissions do not require admin consent and allow the application to act on behalf of a user, accessing resources within the permissions granted to that user.
+- `Client Secrets`:  Your app will pass credentials, i.e. either via a client secret or a certificate to Azure AD to prove its identity, and therefore request tokens
+
+**Enterprise Registration -** 
+
+For a single-tenant application, an Enterprise App with the same name is automatically created once you register an application. Enterprise Apps is all about how your app should behave and work in your ‘**local**’ tenant. 
+
+It focus on several things:
+
+- `API Permission Management`: Admins can review scope permissions that were set by your app under App Registration. Depending on the nature of your tenant, admins may restrict its scope or may allow users to consent to a subset of permissions rather than the entire set of permissions that your app is requesting for.
+- `Access Management` : Set owners or groups to manage your app, configure SSO, and if required set any additional approval access before granting permissions, etc.
+
+<aside>
+💡 **Application Registration is responsible for setting client secrets / certificates, scopes and API permission whereas Service Principal controls identity, authorisation and policies.**
+
+</aside>
+
+For this blog post and Terraform automation we will be focusing on the following: 
+
+1. Creating application registration within Azure Active Directory.
+2. Creating a service principal associated with an application within Azure Active Directory.
+3. Grant admin consent for application permissions.
+4. Understanding Terraform `For_each` expressions, mutating, filtering and grouping.
+
+This is how it looks like in the Portal: 
+
+![admin-consent](https://learn.microsoft.com/en-us/entra/identity-platform/media/consent-framework/grant-consent.png)
+
+<aside>
+💡 Granting admin consent to an application will grant the app and the app's publisher access to your tenant data. Carefully review what permission the application is requesting before granting consent.
+
+</aside>
 
 # Terraform Module Call
 
-```
+Below is our call to  `service-principal` module, this module will create all of the above from creating application registration, service principal associated with the app registration and granting admin consent. 
+
+```jsx
 module "service_principal" {
   source = "../.."
 
-  service_principal = {
-    name       =  "SPN-ONE"
-    permissions = [
-      {
-        Permission = "MicrosoftGraph",
-        Role       = ["User.ReadWrite.All", "User.Read.All"]
-        Scope      = ["User.ReadWrite"]
-      },
-      {
-        Permission = "DynamicsCrm",
-        Scope      = ["user_impersonation"]
+  service_principals = {
+    SPN-ONE = {
+      permissions = [
+        {
+          api         = "MicrosoftGraph"
+          delegated   = ["User.ReadWrite"]
+        },
+        {
+          api         = "DynamicsCrm"
+          delegated   = ["user_impersonation"]
+        }
+      ],
+      web = {
+        urls = {
+          homePageURL  = "https://app.example.net"
+          logoutURL    = "https://app.example.net/logout"
+          redirectURLs = ["https://app.example.net/account", "https://app.example.net/account2"]
+
+          grant = {
+            useAccessTokens = true
+            useIdTokens     = true
+          }
+        }
       }
-    ]
+    },
+    SPN-TWO = {
+      permissions = [
+        {
+          api         = "DynamicsCrm"
+          delegated   = ["user_impersonation"]
+        },
+        {
+          api         = "PowerBiService",
+          application = ["Tenant.ReadWrite.All"]
+        }
+      ],
+      web = {
+        urls = {
+          homePageURL  = "https://app.example.net"
+          logoutURL    = "https://app.example.net/logout"
+          redirectURLs = ["https://app.example.net/account", "https://app.example.net/account2"]
+        }
+      }
+    },
+    SPN-THREE = {}
   }
 }
 ```
 
-The most important thing to note is `permissions` array, it defines a list of action that the Service Principal can perform.
+The most important thing to note is `permissions` array, it defines a list of action that the application object can perform which the service principal object inherits. 
 
-- `Permission` : The API permission for the App Registration/Service Principal, specifying which services or APIs the application can access.
-- `Roles`: Application Permissions allow the application to operate autonomously, without user intervention, and typically require admin consent.
-- `Scope`: Delegated Permissions do not require admin consent and allow the application to act on behalf of a user, accessing resources within the permissions granted to that user.
+- `API` : The API permission for the App Registration/Service Principal, specifying which services or APIs the application can access. (e.g. Microsoft Graph)
+- `Application`: Application Permissions allow the application to operate autonomously, without user intervention, and typically require admin consent.
+- `Delegated`: Delegated Permissions do not require admin consent and allow the application to act on behalf of a user, accessing resources within the permissions granted to that user.
 
-# The Module 
+# The Module
 
-Now we get into the fun stuff 🎉! Whilst going through the module I am going to split it up into some sub-sections to make it easier for us to talk through. 
+There are several `well_known` Enterprise Application that is already provided by Microsoft within Azure universe. `azure_service_principal` provides access to various Microsoft cloud service resources. 
 
-```
-resource "azuread_service_principal" "well-_known" {
-  for_each = { 
-    for perm in var.service_principal.permissions : 
-    format("%s_%s", var.service_principal.name, perm.Permission) => perm 
-  }
+When you specify `use_existing = true`, you indicate that the service principal should be linked to an already existing application in Azure AD.
 
-  client_id    = data.azuread_application_published_app_ids.well_known.result[each.value.Permission]
+```jsx
+resource "azuread_service_principal" "well_known" {
+  for_each = toset(flatten([
+    for k, v in var.service_principals : [
+      for values in v.permissions : values.api
+    ]
+  ]))
+
+  client_id    = data.azuread_application_published_app_ids.well_known.result[each.value]
   use_existing = true
 }
 ```
 
-There are several `well-known` Enterprise Application that is already provided by Microsoft within Auzre universe. It is a universal API endpoint that provides access to various Microsoft cloud service resources. When you specify `use_existing = true`, you indicate that the service principal should be linked to an already existing application in Azure AD. 
+It is important to know some Terraform `For_each` expressions, in my block above we iterates over each **`spn`** in **`var.service_principals`** For each service principal (**`spn`**), it generates the list of **`api`** values from the inner comprehension. This results in a list of lists, where each inner list contains the **`api`** values corresponding to the permissions of a specific service principal.
 
-The data source fetch is crucial because it ensures you're referencing the correct, universally recognized Microsoft Graph application ID.
+**`flatten`** function takes the list of lists produced by the outer list comprehension and flattens it into a single list. This means that rather than having a separate list for each service principal, you get a single list that combines all **`api`** values across all service principals and their permissions.
 
-&nbsp;
+**`toset`** function converts the flattened list of **`api`** values into a set, which automatically removes any duplicate **`api`** values. Sets in Terraform are collections of unique elements, so this step ensures that each **`api`** value is listed only once, regardless of how many times it appears across different service principals or permissions. 
+
+This is the final output - removing any duplicates and list object. 
 
 ```
-resource "azuread_application" "this" {
-  display_name = var.service_principal.name
-  owners       = [data.azuread_client_config.current.object_id]
+{"MicrosoftGraph", "DynamicsCrm"}
+```
 
-  dynamic "required_resource_access" {
-    for_each = var.service_principal.permissions
+# Creating Application Registration
 
-    content {
-      resource_app_id = data.azuread_application_published_app_ids.well_known.result[required_resource_access.value.Permission]
+Once we have provisioned our `well_known` Service Principal, we will need to create an Application Registration before we can create our SPN. We will use `dynamic` block which iterate over roles and scopes to configure access permissions dynamically based on input variables.
 
-      dynamic "resource_access" {
-        for_each = can(required_resource_access.value.Role) ? toset(required_resource_access.value.Role) : toset([])
+```jsx
+dynamic "resource_access" {
+  for_each = can(required_resource_access.value.application) ? toset(required_resource_access.value.application) : toset([])
 
-        content {
-          id   = azuread_service_principal.resource_id[format("%s_%s", var.service_principal.name, required_resource_access.value.Permission)].app_role_ids[resource_access.value]
-          type = "Role"
-        }
-      }
-
-      dynamic "resource_access" {
-        for_each = can(required_resource_access.value.Scope) ? toset(required_resource_access.value.Scope) : toset([])
-
-        content {
-          id   = azuread_service_principal.resource_id[format("%s_%s", var.service_principal.name, required_resource_access.value.Permission)].oauth2_permission_scope_ids[resource_access.value]
-          type = "Scope"
-        }
-      }
-    }
+  content {
+    id   = azuread_service_principal.well_known[required_resource_access.value.api].app_role_ids[resource_access.value]
+    type = "Role"
   }
 }
 
-resource "azuread_service_principal" "principal_id" {
-  client_id = azuread_application.this.client_id
+dynamic "resource_access" {
+  for_each = can(required_resource_access.value.delegated) ? toset(required_resource_access.value.delegated) : toset([])
+
+  content {
+    id   = azuread_service_principal.well_known[required_resource_access.value.api].oauth2_permission_scope_ids[resource_access.value]
+    type = "Scope"
+  }
 }
-
 ```
 
-Once we have provisioned our `well_known` Service Principal, we will need to create a Enterprise Application before we can create our very own custom SPN. We will use `dynamic` block which iterate over roles and scopes to configure access permissions dynamically based on input variables.
+The block above configures roles for the application's required resource access and delegated permissions or scopes for the application's required resource access. Its good to note that both `application` uses **`application.app_role_ids`** and `delegated` uses **`oauth2_permission_scope_ids`.** 
 
-Note that `Application permission` or `Role` requires us to use app_role_ids whereas `Delegated permission` or `Scope` requires us to use oauth2_permission_scope_ids basically the `content` specifies the configuration of app role IDs and OAuth2 permission scopes for the service principal.
+Somethings to note about the special attributes: 
 
-&nbsp;
+- **`application.app_role_ids` -**  A mapping of app role values to app role IDs, as published by the associated application, intended to be useful when referencing app roles in other resources in your configuration.
+- **`oauth2_permission_scope_ids` -** A mapping of OAuth2.0 permission scope values to scope IDs, as exposed by the associated application, intended to be useful when referencing permission scopes in other resources in your configuration.
 
+Once the App Registration is created, we can finally create our SPN with the following block:
+
+```jsx
+resource "azuread_service_principal" "principal_id" {
+  for_each = var.service_principals
+
+  client_id = azuread_application.this[each.key].client_id
+}
 ```
+
+# Granting Admin Consent
+
+Granting admin consent for our App Registration requires us to mutate the structure of our variable. Our goal is to combine the service_principal object and the application list object to create a unique key. 
+
+We want to be able to run a for_each over every **`application`** in **`v.application`**. For each application, it creates a map containing:
+
+- **spn**: The name of the service principal (**`v.name`**).
+- **role**: The current application being iterated over.
+- **permission**: The API associated with the permission (**`perm.api`**).
+
+The conditional **`if length(perm.application) > 0`** ensures that this inner comprehension only executes if there are applications listed in **`perm.application`**, avoiding processing empty lists.
+
+```jsx
 resource "azuread_app_role_assignment" "admin_consent" {
   for_each = {
     for i in flatten([
-        for perm in var.service_principal.permissions : [
-            for role in perm.Role : {
-                spn = var.service_principal.name
-                role = role
-                permission = perm.Permission
-              } if length(perm.Role) > 0
-            ]
+      for k, v in var.service_principals : [
+        for perm in v.permissions : [
+          for application in perm.application : {
+            spn        = k
+            role       = application
+            permission = perm.api
+          } if length(perm.application) > 0
+        ]
+      ]
     ]) : format("%s_%s", i.spn, i.role) => i
   }
 
-  principal_object_id = azuread_service_principal.principal_id.object_id
-  resource_object_id  = azuread_service_principal.resource_id[format("%s_%s", var.service_principal.name, each.value.permission)].object_id
-  app_role_id         = azuread_service_principal.resource_id[format("%s_%s", var.service_principal.name, each.value.permission)].app_role_ids[each.value.role]
+  principal_object_id = azuread_service_principal.principal_id[each.value.spn].object_id
+  resource_object_id  = azuread_service_principal.well_known[each.value.permission].object_id
+  app_role_id         = azuread_service_principal.well_known[each.value.permission].app_role_ids[each.value.role]
 }
 ```
 
-The above manages app role assignment for a group, user or service principal. But more importantly it can be used to grant admin consent for application permissions. This require a little interpolation but I will try my best to explain it. 
+This is the final output - notice that it only takes into account the object that has value within the  application list(object)
 
-We use `Flatten` which allow us to convert our list of list into a single flat list. Remember we have a list of Roles and/or Scopes within the list of Service Principal `permissions`. Flattening ensures that the for_each can iterate over a simple list of objects. 
+```jsx
+{
+  "SPN-TWO_Tenant.ReadWrite.All" = {
+    spn = "SPN-TWO"
+    role = "Tenant.ReadWrite.All"
+    permission = "PowerBiService"
+  }
+}
+```
 
-The final mapped structure uses format("%s_%s", i.spn, i.role) to create a unique key for each role assignment, and i represents the value (containing spn, role, and permission).
+If you would like to learn more about `for_each` expression, explore Brendan Thompson's insightful blog post[here](https://brendanthompson.com/posts/2022/10/terraform-for-expression). Brendan covers both basic and advanced usage scenarios.
 
-- `principal_object_id`: This is the object ID of the service principal to which the role is being assigned. It is obtained from another resource, azuread_service_principal.principal_id, which defines the service principal.
-- `resource_object_id`: This is the object ID of the application or another service principal against which the role is defined. It dynamically references the object ID using each.value.permission, which corresponds to the permission involved in the role assignment.
-- `app_role_id`: This identifies the specific role within the application or service that is being assigned to the service principal. The role ID is retrieved dynamically, matching the role and permission.
+# Conclusion:
 
-# Conclusion
+One of the persistent challenges in managing Azure AD Service Principals is the requirement for admin consent when setting application permissions. This process often requires manual intervention, which can lead to delays or even be overlooked, posing a risk to both security and efficiency.
 
-One of the persistent challenges in managing Azure AD Service Principals is the requirement for admin consent when setting application permissions. This process often requires manual intervention, which can lead to delays or even be overlooked, posing a risk to both security and efficiency. 
+Our Terraform module addresses this issue by automating the assignment of application permissions, eliminating the need for manual admin consent and UUID entries. This automation not only streamlines the process but also ensures that each service principal is configured consistently and securely, adhering to best practices without requiring direct administrative action. Embrace the power of automation with our solution to enhance your Azure environment’s management and security.
 
-Our Terraform module addresses this issue by automating the assignment of application permissions, eliminating the need for manual admin consent and UUID entries. This automation not only streamlines the process but also ensures that each service principal is configured consistently and securely, adhering to best practices without requiring direct administrative action. Embrace the power of automation with our solution to enhance your Azure environment's management and security.
-
-You can find this module [here](https://github.com/Colin-Loh/terraform-azuread-service-principal)
-
-&nbsp;
+You can find this module [here](https://github.com/Colin-Loh/terraform-azuread-service-principal)
