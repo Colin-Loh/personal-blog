@@ -73,7 +73,7 @@ For this blog post and Terraform automation we will be focusing on the following
 1. Creating application registration within Azure Active Directory.
 2. Creating a service principal associated with an application within Azure Active Directory.
 3. Grant admin consent for application permissions.
-4. Understanding Terraform `For_each` expressions, mutating, filtering and grouping.
+4. Understanding Terraform `for_each` expressions, mutating, filtering and grouping.
 
 This is how it looks like in the Portal: 
 
@@ -265,7 +265,7 @@ This is the final output - notice that it only takes into account the object tha
 }
 ```
 
-If you would like to learn more about `for_each` expression, explore Brendan Thompson's insightful blog post[here](https://brendanthompson.com/posts/2022/10/terraform-for-expression). Brendan covers both basic and advanced usage scenarios.
+If you would like to learn more about `for_each` expression, explore Brendan Thompson's insightful blog post [here](https://brendanthompson.com/posts/2022/10/terraform-for-expression). Brendan covers both basic and advanced usage scenarios.
 
 # Conclusion:
 
@@ -273,4 +273,4 @@ One of the persistent challenges in managing Azure AD Service Principals is the 
 
 Our Terraform module addresses this issue by automating the assignment of application permissions, eliminating the need for manual admin consent and UUID entries. This automation not only streamlines the process but also ensures that each service principal is configured consistently and securely, adhering to best practices without requiring direct administrative action. Embrace the power of automation with our solution to enhance your Azure environment’s management and security.
 
-You can find this module [here](https://github.com/Colin-Loh/terraform-azuread-service-principal)
+You can find this module on GitHub [here](https://github.com/Colin-Loh/terraform-azuread-service-principal)
