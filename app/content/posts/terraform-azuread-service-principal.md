@@ -31,23 +31,23 @@ UseHugoToc: false
 ---
 # Introduction
 
-In this blog post, we will explore how to efficiently manage Azure Active Directory (AD) Service Principals using Terraform. Before we go over how we can automate this process, lets us go over what is a Service Principal, what is an App Registration and why do we need it. 
+In this blog post, we will explore how to efficiently manage Azure Active Directory (AD) Service Principals using Terraform. Before we delve into automating this process, let's discuss what a Service Principal is, what App Registration entails, and why it's necessary.
 
 # App Registration
 
-App Registration just as the name implies it provide Azure AD **authentication / authorization** for any applications (e.g. Azure DevOps). 
+As the name suggests, App Registration provides Azure AD **authentication / authorization** for any applications (e.g. Azure DevOps). 
 
 This is how it looks like : 
 
 ![app-reg](https://learn.microsoft.com/en-us/graph/images/quickstart-register-app/portal-02-app-reg-01.png)
 
-Once it is registered, the application will be created in  `App Registrations` and  `Enterprise Registrations` also known as **Service Principals.** You can use the Enterprise Application page in Azure AD to see a list of Service Principals in the tenant. 
+Once registered, the application appears in  `App Registrations` and  `Enterprise Registrations` also known as **Service Principals.** You can use the Enterprise Application page in Azure AD to view a list of Service Principals within the tenant.
 
 Confused yet? Lets talk about the differences: 
 
-**Application Registration - T**his is the actual application instance, local representation or application object (whatever you want to call this). In simple words, its basically a place where you set the authentication and authorization of your application. 
+**Application Registration -** This is the actual instance of the application or its local representation. Simply put, it's where you configure the authentication and authorization settings for your application.
 
-In the portal, you can set various things but the most important things are:
+Important aspects in the portal include:
 
 - `API Permission` : The API permission for the App Registration/Service Principal, specifying which services or APIs the application can access. (e.g. Microsoft Graph)
 - `Application Permission`: Application Permissions allow the application to operate autonomously, without user intervention, and typically require admin consent.
@@ -56,12 +56,10 @@ In the portal, you can set various things but the most important things are:
 
 **Enterprise Registration -** 
 
-For a single-tenant application, an Enterprise App with the same name is automatically created once you register an application. Enterprise Apps is all about how your app should behave and work in your ‘**local**’ tenant. 
+For single-tenant applications, an Enterprise App with the corresponding name is automatically created upon registration. This setup focuses on how your app functions within your 'local' tenant, including:
 
-It focus on several things:
-
-- `API Permission Management`: Admins can review scope permissions that were set by your app under App Registration. Depending on the nature of your tenant, admins may restrict its scope or may allow users to consent to a subset of permissions rather than the entire set of permissions that your app is requesting for.
-- `Access Management` : Set owners or groups to manage your app, configure SSO, and if required set any additional approval access before granting permissions, etc.
+- `API Permission Management`: Admins can review and manage scope permissions set by your app under App Registration.
+- `Access Management` : Configure owners or groups to manage your app, set up SSO, and, if necessary, establish additional approval access before granting permissions.
 
 <aside>
 💡 **Application Registration is responsible for setting client secrets / certificates, scopes and API permission whereas Service Principal controls identity, authorisation and policies.**
@@ -86,7 +84,7 @@ This is how it looks like in the Portal:
 
 # Terraform Module Call
 
-Below is our call to  `service-principal` module, this module will create all of the above from creating application registration, service principal associated with the app registration and granting admin consent. 
+Below is our call to  `service-principal` module. This module will handle everything from creating the application registration to associating the service principal and granting admin consent.
 
 ```jsx
 module "service_principal" {
@@ -141,7 +139,7 @@ module "service_principal" {
 }
 ```
 
-The most important thing to note is `permissions` array, it defines a list of action that the application object can perform which the service principal object inherits. 
+The most important thing to note is `permissions` array as it defines the capabilities that the application object can perform, which are then inherited by the service principal object. Here's a breakdown:
 
 - `API` : The API permission for the App Registration/Service Principal, specifying which services or APIs the application can access. (e.g. Microsoft Graph)
 - `Application`: Application Permissions allow the application to operate autonomously, without user intervention, and typically require admin consent.
@@ -166,7 +164,7 @@ resource "azuread_service_principal" "well_known" {
 }
 ```
 
-It is important to know some Terraform `For_each` expressions, in my block above we iterates over each **`spn`** in **`var.service_principals`** For each service principal (**`spn`**), it generates the list of **`api`** values from the inner comprehension. This results in a list of lists, where each inner list contains the **`api`** values corresponding to the permissions of a specific service principal.
+It is important to know some Terraform `for_each` expressions, in my block above we iterates over each **`k`** in **`var.service_principals`** For each service principal (**`k`**), it generates the list of **`api`** values from the inner comprehension. This results in a list of lists, where each inner list contains the **`api`** values corresponding to the permissions of a specific service principal.
 
 **`flatten`** function takes the list of lists produced by the outer list comprehension and flattens it into a single list. This means that rather than having a separate list for each service principal, you get a single list that combines all **`api`** values across all service principals and their permissions.
 
@@ -180,7 +178,7 @@ This is the final output - removing any duplicates and list object.
 
 # Creating Application Registration
 
-Once we have provisioned our `well_known` Service Principal, we will need to create an Application Registration before we can create our SPN. We will use `dynamic` block which iterate over roles and scopes to configure access permissions dynamically based on input variables.
+Once we have provisioned our `well_known` Service Principal, we will need to create an Application Registration before our SPN. We will use `dynamic` block which iterate over roles and scopes to configure access permissions dynamically based on input variables.
 
 ```jsx
 dynamic "resource_access" {
@@ -202,7 +200,7 @@ dynamic "resource_access" {
 }
 ```
 
-The block above configures roles for the application's required resource access and delegated permissions or scopes for the application's required resource access. Its good to note that both `application` uses **`application.app_role_ids`** and `delegated` uses **`oauth2_permission_scope_ids`.** 
+This configuration sets up roles and delegated permissions for the application's required resource access. The application.app_role_ids and oauth2_permission_scope_ids mappings are crucial for referencing in other resources. Its good to note that both `application` uses **`application.app_role_ids`** and `delegated` uses **`oauth2_permission_scope_ids`.** 
 
 Somethings to note about the special attributes: 
 
@@ -253,7 +251,7 @@ resource "azuread_app_role_assignment" "admin_consent" {
 }
 ```
 
-This is the final output - notice that it only takes into account the object that has value within the  application list(object)
+This is the final output - notice that it only takes into account the object that has value within the application list(object)
 
 ```jsx
 {
