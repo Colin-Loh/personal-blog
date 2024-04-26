@@ -29,7 +29,7 @@ UseHugoToc: false
 #     relative: false # when using page bundles set this to true
 #     hidden: true # only hide on current single page
 ---
-## Introduction:
+# Introduction:
 
 When I embarked on my journey as a Cloud Engineer, I found myself surrounded by buzzwords. One question that frequently crossed everyone's mind was:
 
@@ -39,7 +39,7 @@ This question led me down a rabbit hole in search of answers, prompting me to de
 
 - - -
 
-## What is DevOps?
+# What is DevOps?
 DevOps, as the name suggests is a unification of “Development” and “Operations”. In both Amazon and Google’s definition:
 
 > *“DevOps is set of **practices**, **guidelines** and **culture** to break down silo and ability to deliver application”* 
@@ -51,7 +51,7 @@ As Werner Vogels, Amazon CTO puts it:
 
 &nbsp;
 
-## What is SRE? 
+# What is SRE? 
 
 Ben Treynor Sloss, a Google Engineer introduces Site Reliability Engineering to be responsible for: 
 
@@ -70,7 +70,7 @@ Site Reliability Engineering investigates the root cause and devise strategies t
 
 - - -
 
-## Key Differences between DevOps and SRE?
+# Key Differences between DevOps and SRE?
 
 ```
 class SRE implements DevOps
@@ -104,7 +104,7 @@ DevOps aims to deploy code quickly but at the expense of its **stability** and *
 
 - - -
 
-## DevOps Concepts
+# DevOps Concepts
 
 ![](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*h5Zs-8nFcTrgR1UceyKYXA.png)
 
@@ -129,5 +129,7 @@ CD builds on CI by automating the deployment process. It ensures that code chang
 
 ### 6. Operate: 
 DevOps encourages continuous operation and monitoring of applications and infrastructure to gather data on performance, user experience, and other key metrics. Feedback loops provide insights into system behaviour, helping teams make informed decisions for improvements.
+
+# Conclusion
 
 DevOps transforms the software development process by fostering a culture of collaboration, continuous improvement, and automation. By aligning development and operations teams and embracing these core concepts, organisations can deliver high-quality software more frequently with fewer errors and respond to market demands effectively.
